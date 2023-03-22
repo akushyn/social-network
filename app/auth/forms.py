@@ -9,6 +9,9 @@ from wtforms import (
 
 
 class LoginForm(FlaskForm):
+    """
+    Login form
+    """
     username = StringField("Username", validators=[validators.DataRequired()])
     password = PasswordField("Password", validators=[validators.DataRequired()])
     remember = BooleanField("Remember")
