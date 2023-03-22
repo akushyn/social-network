@@ -15,6 +15,9 @@ def create_app():
     app.config.from_object(Config)
 
     # register blueprints here
+    from .main import bp as main_bp
+    app.register_blueprint(main_bp)
+
     from .auth import bp as auth_bp
     app.register_blueprint(auth_bp)
 
@@ -24,5 +27,3 @@ def create_app():
 # create instance of application
 app = create_app()
 
-# import routes at the bottom to avoid circular imports
-from . import routes
