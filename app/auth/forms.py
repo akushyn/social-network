@@ -29,7 +29,7 @@ class RegisterForm(LoginForm):
     """
     Register form
     """
-    email = StringField("Email", validators=[validators.DataRequired(message="Email is required"), validators.Email()])
+    email = EmailField("Email", validators=[validators.DataRequired(message="Email is required"), validators.Email()])
     confirm_password = PasswordField(
         "Confirm Password",
         validators=[
