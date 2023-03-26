@@ -1,5 +1,5 @@
-from . import bp
-from flask import render_template, flash
+from app.main import bp
+from flask import render_template
 
 
 @bp.route("/")
