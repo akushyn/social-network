@@ -32,6 +32,9 @@ def create_app():
     from .auth import bp as auth_bp
     app.register_blueprint(auth_bp)
 
+    from .faker import bp as fake_bp
+    app.register_blueprint(fake_bp)
+
     from . import models
 
     @app.context_processor

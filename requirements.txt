@@ -21,3 +21,4 @@ typing-extensions==4.5.0
 Werkzeug==2.2.3
 WTForms==3.0.1
 zipp==3.15.0
+Faker==18.3.1
