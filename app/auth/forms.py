@@ -13,7 +13,7 @@ class LoginForm(FlaskForm):
     """
     Login form
     """
-    username = StringField("Username",validators=[validators.DataRequired(message="Username is required")])
+    username = StringField("Username", validators=[validators.DataRequired(message="Username is required")])
     password = PasswordField(
         "Password",
         validators=[
