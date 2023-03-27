@@ -106,3 +106,11 @@ Downgrade database revision
 flask db downgrade
 ```
 More details see in [Flask-Migrate Documentation](https://flask-migrate.readthedocs.io/en/latest/#)
+
+### CLI commands
+
+Generate `n` fake users
+```
+cd social-network
+flask fake users 5
+```
