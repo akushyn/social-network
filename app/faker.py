@@ -6,8 +6,6 @@ from app import db
 from app.models import User
 
 
-
-
 bp = Blueprint('fake', __name__)
 faker = Faker()
 
