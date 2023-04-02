@@ -17,6 +17,20 @@ pip3 install -r requirements.txt
 
 Install Postgres from official site.
 
+When you have done with installing PostgreSQL on your pc, follow next steps to: 
+
+- create database
+- create database user
+
+```
+sudo su - postgres
+psql
+CREATE DATABASE network;
+CREATE USER network WITH PASSWORD 'network';
+ALTER USER network WITH SUPERUSER;
+GRANT ALL PRIVILEGES ON DATABASE network TO network;
+```
+
 
 ### Flask-SQLAlchemy
 
