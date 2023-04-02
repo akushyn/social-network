@@ -13,6 +13,11 @@ cd social-network
 pip3 install -r requirements.txt
 ```
 
+Copy `env.example` to `.env` with initial configurations
+```
+cp env.example .env
+```
+
 ### Setup database
 
 Install Postgres from official site.
