@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-8">
+      {% for post in posts %}
+        <div class="card mb-3">
+          <div class="card-body">
+            <h5 class="card-title">{{ post.title }}</h5>
+            <p class="card-text">{{ post.content }}</p>
+          </div>
+          <div class="card-footer">
+            <div class="d-flex justify-content-between">
+              <div class="btn-group">
+                <a href="{{ url_for('post.post_like', post_id=post.id) }}" class="btn btn-sm btn-outline-primary">
+                  <i class="fas fa-thumbs-up"></i> {{ post.likes|length }}
+                </a>
+                <a href="{{ url_for('post.post_dislike', post_id=post.id) }}" class="btn btn-sm btn-outline-primary">
+                  <i class="fas fa-thumbs-down"></i> {{ post.dislikes|length }}
+                </a>
+              </div>
+              <small class="text-muted">{{ post.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</small>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Create a new post</h5>
+          <form method="post" action="{{ url_for('post.create_post') }}">
+            {{ form.csrf_token }}
+            <div class="form-group">
+              <label for="title">Title</label>
+              {{ form.title(class='form-control', id='title', placeholder='Enter title') }}
+            </div>
+            <div class="form-group">
+              <label for="content">Content</label>
+              {{ form.content(class='form-control', id='content', placeholder='Enter content') }}
+            </div>
+            <button type="submit" class="btn btn-primary">Create post</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
