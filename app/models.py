@@ -18,6 +18,8 @@ class User(BaseModel, UserMixin):
     email = db.Column(db.String, unique=True, index=True)
     password = db.Column(db.String, nullable=False)
 
+    posts = db.relationship("Post", backref="author", uselist=True, lazy="dynamic")
+
     def avatar(self, size):
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()
         return f'https://www.gravatar.com/avatar/{digest}?d=identicon&s={size}'
