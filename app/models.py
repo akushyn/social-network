@@ -56,6 +56,8 @@ class Profile(BaseModel):
     last_name = db.Column(db.String)
     bio = db.Column(db.String)
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
+    facebook = db.Column(db.String)
+    linkedin = db.Column(db.String)
 
     user = db.relationship("User", backref=db.backref("profile", uselist=False), uselist=False)
 
@@ -71,6 +73,9 @@ class Post(BaseModel):
         db.ForeignKey("user.id", name="fk_posts_author_id", ondelete="CASCADE"),
         nullable=False
     )
+
+    likes = db.relationship("Like", uselist=True)
+    dislikes = db.relationship("Dislike", uselist=True)
 
 
 # Like model
