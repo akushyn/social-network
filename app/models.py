@@ -72,3 +72,37 @@ class Post(BaseModel):
         nullable=False
     )
 
+
+# Like model
+class Like(BaseModel):
+    __tablename__ = "likes"
+
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey('user.id', name="fk_likes_user_id", ondelete="CASCADE"),
+        nullable=False
+    )
+    post_id = db.Column(
+        db.Integer,
+        db.ForeignKey('posts.id', name="fk_likes_post_id", ondelete="CASCADE"),
+        nullable=False
+    )
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+
+# Dislike model
+class Dislike(BaseModel):
+    __tablename__ = "dislikes"
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey('user.id', name="fk_dislikes_user_id", ondelete="CASCADE"),
+        nullable=False
+    )
+    post_id = db.Column(
+        db.Integer,
+        db.ForeignKey('posts.id', name="fk_dislikes_post_id", ondelete="CASCADE"),
+        nullable=False
+    )
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+
