@@ -57,3 +57,11 @@ def create_app():
 
 # create instance of application
 app = create_app()
+
+
+@app.before_request
+def before_request():
+    if current_user.is_authenticated:
+        if current_user.profile:
+            current_user.profile.last_seen = datetime.utcnow()
+            db.session.commit()
