@@ -18,6 +18,10 @@ class User(BaseModel, UserMixin):
     email = db.Column(db.String, unique=True, index=True)
     password = db.Column(db.String, nullable=False)
 
+    def avatar(self, size):
+        digest = md5(self.email.lower().encode('utf-8')).hexdigest()
+        return f'https://www.gravatar.com/avatar/{digest}?d=identicon&s={size}'
+
     def set_password(self, password):
         """
         Set user password hash
