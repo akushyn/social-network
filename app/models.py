@@ -1,3 +1,6 @@
+from datetime import datetime
+from hashlib import md5
+
 from app import db
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -45,5 +48,19 @@ class Profile(BaseModel):
     first_name = db.Column(db.String)
     last_name = db.Column(db.String)
     bio = db.Column(db.String)
+    last_seen = db.Column(db.DateTime, default=datetime.utcnow)
 
-    user = db.relationship("User", backref="profile", uselist=False)
+    user = db.relationship("User", backref=db.backref("profile", uselist=False), uselist=False)
+
+
+class Post(BaseModel):
+    __tablename__ = 'posts'
+
+    title = db.Column(db.String, nullable=False)
+    content = db.Column(db.String, nullable=False)
+    created_at = db.Column(db.Datetime, default=datetime.utcnow)
+    author_id = db.Column(
+        db.Integer,
+        db.ForeignKey("user.id", name="fk_posts_author_id"),
+        nullable=False
+    )
