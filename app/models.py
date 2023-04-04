@@ -62,7 +62,7 @@ class Post(BaseModel):
 
     title = db.Column(db.String, nullable=False)
     content = db.Column(db.String, nullable=False)
-    created_at = db.Column(db.Datetime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
     author_id = db.Column(
         db.Integer,
         db.ForeignKey("user.id", name="fk_posts_author_id"),

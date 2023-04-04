@@ -23,16 +23,14 @@ def edit_profile():
     form = EditProfileForm()
     if form.validate_on_submit():
 
-        if db.session.query(User).filter(User.username == form.username.data).first() is not None:
-            flash(f"Username '{form.username.data}' is in use by another account, choose another one", category="error")
-            return redirect(url_for('user.edit_profile'))
-
-        current_user.username = form.username.data
+        current_user.profile.first_name = form.first_name.data
+        current_user.profile.last_name = form.last_name.data
         current_user.profile.bio = form.bio.data
         db.session.commit()
         flash('Your changes have been saved.', category="success")
         return redirect(url_for('user.edit_profile'))
     elif request.method == 'GET':
-        form.username.data = current_user.username
+        form.first_name.data = current_user.profile.first_name
+        form.last_name.data = current_user.profile.last_name
         form.bio.data = current_user.profile.bio
     return render_template('user/edit_profile.html', title='Edit Profile', form=form)
