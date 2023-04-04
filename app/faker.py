@@ -3,8 +3,7 @@ from flask import Blueprint
 from faker import Faker
 
 from app import db
-from app.models import User
-
+from app.models import User, Post
 
 bp = Blueprint('fake', __name__)
 faker = Faker()
@@ -45,3 +44,29 @@ def users(num):
     # persist changes
     db.session.commit()
     print(num, 'users added.')
+
+
+@bp.cli.command("user_posts")
+@click.argument('user_id', type=int)
+@click.argument('num', type=int)
+def user_posts(user_id, num):
+    """
+    Create the given number of fake posts, assigned to random users
+    """
+
+    user = (
+        db.session.query(User)
+        .filter(User.id == user_id)
+    ).first_or_404()
+
+    for i in range(num):
+        created_at = faker.date_time_this_year()
+        post = Post(
+            title=f"Post at {str(created_at)}",
+            content=faker.paragraph(),
+            author=user,
+            created_at=created_at
+        )
+        db.session.add(post)
+    db.session.commit()
+    print(num, 'posts added.')
