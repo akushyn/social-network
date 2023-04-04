@@ -4,7 +4,7 @@ from .forms import LoginForm, RegisterForm
 from flask_login import current_user, login_user, logout_user
 
 from .. import db
-from ..models import User
+from ..models import User, Profile
 
 
 @bp.route("/login", methods=["GET", "POST"])
@@ -42,13 +42,24 @@ def register():
 
     form = RegisterForm()
     if form.validate_on_submit():
+        if db.session.query(User.username).filter_by(username=form.username.data).first() is not None:
+            flash(f"Username '{form.username.data}' already in use", category="error")
+            return redirect(url_for("auth.register"))
+
+        if db.session.query(User.email).filter_by(email=form.email.data).first() is not None:
+            flash(f"Email '{form.email.data}' already in use", category="error")
+            return redirect(url_for("auth.register"))
+
         user = User(username=form.username.data, email=form.email.data)
         user.set_password(form.password.data)
 
         db.session.add(user)
         db.session.commit()
 
-        # TODO: here create a profile object for this user
+        profile = Profile(user_id=user.id)
+        db.session.add(profile)
+        db.session.commit()
+
         flash("Successfully registered!", category="success")
 
         return redirect(url_for("auth.login"))
