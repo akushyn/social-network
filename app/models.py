@@ -111,5 +111,3 @@ class Dislike(BaseModel):
         nullable=False
     )
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-
-

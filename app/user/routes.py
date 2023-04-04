@@ -16,11 +16,11 @@ def blog():
     form = PostForm()
     posts = (
         db.session.query(Post)
-            .filter(
+        .filter(
             Post.author_id == current_user.id
         )
-            .order_by(Post.created_at.desc())
-            .all()
+        .order_by(Post.created_at.desc())
+        .all()
     )
     return render_template("user/blog.html", posts=posts, form=form)
 
