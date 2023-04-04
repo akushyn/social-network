@@ -13,6 +13,7 @@ class BaseModel(db.Model):
 
 
 class User(BaseModel, UserMixin):
+    __tablename__ = "user"
 
     username = db.Column(db.String, unique=True, index=True)
     email = db.Column(db.String, unique=True, index=True)
@@ -48,7 +49,7 @@ class Profile(BaseModel):
 
     user_id = db.Column(
         db.Integer,
-        db.ForeignKey("user.id", name="fk_profiles_user_id"),
+        db.ForeignKey("user.id", name="fk_profiles_user_id", ondelete="CASCADE"),
         nullable=False
     )
     first_name = db.Column(db.String)
@@ -67,6 +68,7 @@ class Post(BaseModel):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     author_id = db.Column(
         db.Integer,
-        db.ForeignKey("user.id", name="fk_posts_author_id"),
+        db.ForeignKey("user.id", name="fk_posts_author_id", ondelete="CASCADE"),
         nullable=False
     )
+
