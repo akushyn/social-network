@@ -20,6 +20,8 @@ class User(BaseModel, UserMixin):
     password = db.Column(db.String, nullable=False)
 
     posts = db.relationship("Post", backref="author", uselist=True, lazy="dynamic")
+    likes = db.relationship('Like', backref='user', lazy='dynamic', primaryjoin='User.id==Like.user_id')
+    dislikes = db.relationship('Dislike', backref='user', lazy='dynamic', primaryjoin='User.id==Dislike.user_id')
 
     def avatar(self, size):
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()
@@ -74,8 +76,8 @@ class Post(BaseModel):
         nullable=False
     )
 
-    likes = db.relationship("Like", uselist=True)
-    dislikes = db.relationship("Dislike", uselist=True)
+    likes = db.relationship("Like", backref="post", uselist=True)
+    dislikes = db.relationship("Dislike", backref="post", uselist=True)
 
 
 # Like model
