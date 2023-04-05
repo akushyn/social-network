@@ -19,9 +19,15 @@ class User(BaseModel, UserMixin):
     email = db.Column(db.String, unique=True, index=True)
     password = db.Column(db.String, nullable=False)
 
-    posts = db.relationship("Post", backref="author", uselist=True, lazy="dynamic")
-    likes = db.relationship('Like', backref='user', lazy='dynamic', primaryjoin='User.id==Like.user_id')
-    dislikes = db.relationship('Dislike', backref='user', lazy='dynamic', primaryjoin='User.id==Dislike.user_id')
+    posts = db.relationship(
+        "Post", backref="author", uselist=True, lazy="dynamic", cascade="all,delete"
+    )
+    likes = db.relationship(
+        'Like', backref='user', lazy='dynamic', primaryjoin='User.id==Like.user_id', cascade="all,delete"
+    )
+    dislikes = db.relationship(
+        'Dislike', backref='user', lazy='dynamic', primaryjoin='User.id==Dislike.user_id', cascade="all,delete"
+    )
 
     def avatar(self, size):
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()
@@ -76,8 +82,8 @@ class Post(BaseModel):
         nullable=False
     )
 
-    likes = db.relationship("Like", backref="post", uselist=True)
-    dislikes = db.relationship("Dislike", backref="post", uselist=True)
+    likes = db.relationship("Like", backref="post", uselist=True, cascade="all,delete")
+    dislikes = db.relationship("Dislike", backref="post", uselist=True, cascade="all,delete")
 
 
 # Like model
@@ -86,12 +92,12 @@ class Like(BaseModel):
 
     user_id = db.Column(
         db.Integer,
-        db.ForeignKey('user.id', name="fk_likes_user_id", ondelete="CASCADE"),
+        db.ForeignKey('user.id', name="fk_likes_user_id"),
         nullable=False
     )
     post_id = db.Column(
         db.Integer,
-        db.ForeignKey('posts.id', name="fk_likes_post_id", ondelete="CASCADE"),
+        db.ForeignKey('posts.id', name="fk_likes_post_id"),
         nullable=False
     )
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
@@ -102,12 +108,12 @@ class Dislike(BaseModel):
     __tablename__ = "dislikes"
     user_id = db.Column(
         db.Integer,
-        db.ForeignKey('user.id', name="fk_dislikes_user_id", ondelete="CASCADE"),
+        db.ForeignKey('user.id', name="fk_dislikes_user_id"),
         nullable=False
     )
     post_id = db.Column(
         db.Integer,
-        db.ForeignKey('posts.id', name="fk_dislikes_post_id", ondelete="CASCADE"),
+        db.ForeignKey('posts.id', name="fk_dislikes_post_id"),
         nullable=False
     )
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
