@@ -20,21 +20,16 @@
                 </a>
                 {% if request.path == url_for('user.blog') %}
                     {% if current_user == post.author %}
-{#                        <form method="post" action="{{ url_for('post.delete', post_id=post.id) }}">#}
-{#                        {{ form.csrf_token }}#}
-{#                          <input type="hidden" name="_method" value="DELETE">#}
-{#                          <button type="submit" class="btn btn-sm btn-outline-danger">#}
-{#                            <i class="fas fa-trash-alt"></i> Delete#}
-{#                          </button>#}
-{#                        </form>#}
                         <a href="{{ url_for('post.delete', post_id=post.id) }}" class="btn btn-sm btn-outline-danger">
                             <i class="fas fa-trash-alt"></i> Delete
                         </a>
                     {% endif %}
                 {% endif %}
             </div>
-            <div>
-                <img src="{{ post.author.avatar(32) }}" class="rounded-circle mr-1">
+            <div class="d-flex align-items-center">
+                <a href="{{ url_for('user.profile', username=post.author.username) }}">
+                    <img src="{{ post.author.avatar(32) }}" class="rounded-circle mr-1">
+                </a>
                 <span>{{ post.author.username }}</span>
             </div>
         </div>
