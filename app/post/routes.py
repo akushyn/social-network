@@ -11,14 +11,22 @@ from app.post.forms import PostForm
 @login_required
 def create():
     form = PostForm()
-    if form.validate_on_submit():
-        # Create a new post object
-        post = Post(title=form.title.data, content=form.content.data, author=current_user)
-        # Add the post to the database
-        db.session.add(post)
-        db.session.commit()
-        flash('Your post has been created!', 'success')
-        return redirect(url_for('user.blog'))
+
+    if request.method == "POST":
+        if form.validate_on_submit():
+            # Create a new post object
+            post = Post(title=form.title.data, content=form.content.data, author=current_user)
+            # Add the post to the database
+            db.session.add(post)
+            db.session.commit()
+            flash('Your post has been created!', 'success')
+        else:
+            title = form.title.data
+
+            if not title or len(title) < 2:
+                flash('Title must be at least 3 characters long', category="error")
+
+        return redirect(url_for("user.blog"))
     return render_template('user/blog.html', title='Create Post', form=form)
 
 
