@@ -9,6 +9,7 @@ from app.user.forms import ProfileForm
 
 
 @bp.route("/blog")
+@login_required
 def blog():
     """
     Display user posts view
