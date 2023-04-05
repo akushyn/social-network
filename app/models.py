@@ -18,6 +18,7 @@ class User(BaseModel, UserMixin):
     username = db.Column(db.String, unique=True, index=True)
     email = db.Column(db.String, unique=True, index=True)
     password = db.Column(db.String, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     posts = db.relationship(
         "Post", backref="author", uselist=True, lazy="dynamic", cascade="all,delete"
