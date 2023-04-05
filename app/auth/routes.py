@@ -5,6 +5,10 @@ from flask_login import current_user, login_user, logout_user
 
 from .. import db
 from ..models import User, Profile
+from ..services import UserService
+
+
+user_service = UserService()
 
 
 @bp.route("/login", methods=["GET", "POST"])
@@ -50,16 +54,7 @@ def register():
             flash(f"Email '{form.email.data}' already in use", category="error")
             return redirect(url_for("auth.register"))
 
-        user = User(username=form.username.data, email=form.email.data)
-        user.set_password(form.password.data)
-
-        db.session.add(user)
-        db.session.commit()
-
-        profile = Profile(user_id=user.id)
-        db.session.add(profile)
-        db.session.commit()
-
+        user_service.create(username=form.username.data, email=form.email.data, password=form.password.data)
         flash("Successfully registered!", category="success")
 
         return redirect(url_for("auth.login"))
