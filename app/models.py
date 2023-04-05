@@ -30,6 +30,12 @@ class User(BaseModel, UserMixin):
         'Dislike', backref='user', lazy='dynamic', primaryjoin='User.id==Dislike.user_id', cascade="all,delete"
     )
 
+    # list of users that follow you
+    followers = db.relationship("Follow", backref="followee", foreign_keys="Follow.followee_id")
+
+    # list of users that you follow
+    following = db.relationship("Follow", backref="follower", foreign_keys="Follow.follower_id")
+
     def avatar(self, size):
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()
         return f'https://www.gravatar.com/avatar/{digest}?d=identicon&s={size}'
@@ -116,5 +122,21 @@ class Dislike(BaseModel):
         db.Integer,
         db.ForeignKey('posts.id', name="fk_dislikes_post_id"),
         nullable=False
+    )
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+
+class Follow(db.Model):
+    __tablename__ = 'follows'
+
+    follower_id = db.Column(
+        db.Integer,
+        db.ForeignKey('user.id', name="fk_follows_follower_id"),
+        primary_key=True
+    )
+    followee_id = db.Column(
+        db.Integer,
+        db.ForeignKey('user.id', name="fk_follows_followee_id"),
+        primary_key=True
     )
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
