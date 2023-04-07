@@ -4,9 +4,11 @@ from faker import Faker
 
 from app import db
 from app.models import User, Post
+from app.services import UserService
 
 bp = Blueprint('fake', __name__)
 faker = Faker()
+user_service = UserService()
 
 
 @bp.cli.command("users")
@@ -15,7 +17,6 @@ def users(num):
     """
     Create 'num' of fake users
     """
-    users = []
     for i in range(num):
         # generate fake username
         username = faker.user_name()
@@ -34,16 +35,15 @@ def users(num):
 
         # no such user in db yet --> insert
         if not user:
-            user = User(
+            user_service.create(
                 username=username,
                 email=email,
+                password=username
             )
-            db.session.add(user)
-            users.append(user)
 
     # persist changes
     db.session.commit()
-    print(num, 'users added.')
+    print(f'{num} users added.')
 
 
 @bp.cli.command("user_posts")
@@ -54,11 +54,7 @@ def user_posts(user_id, num):
     Create the given number of fake posts, assigned to random users
     """
 
-    user = (
-        db.session.query(User)
-        .filter(User.id == user_id)
-    ).first_or_404()
-
+    user = user_service.get_by_id(user_id)
     for i in range(num):
         created_at = faker.date_time_this_year()
         post = Post(
