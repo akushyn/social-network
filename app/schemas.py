@@ -1,9 +1,9 @@
-from marshmallow import EXCLUDE
+from marshmallow import EXCLUDE, fields
 from marshmallow.fields import Nested
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchemaOpts, SQLAlchemyAutoSchema
 
 from app import db
-from app.models import User, Profile
+from app.models import User, Profile, Post, Like
 
 
 class BaseOpts(SQLAlchemyAutoSchemaOpts):
@@ -42,3 +42,21 @@ class UserSchema(BaseSchema):
         exclude = ('password',)
 
     profile = Nested(ProfileSchema(), many=False)
+
+
+class PostSchema(BaseSchema):
+    class Meta:
+        model = Post
+
+
+class PostListSchema(BaseSchema):
+    class Meta:
+        model = Post
+
+
+class LikeSchema(BaseSchema):
+    class Meta:
+        model = Like
+
+    user_id = fields.Integer(required=True)
+    post_id = fields.Integer(required=True)

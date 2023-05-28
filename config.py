@@ -1,3 +1,4 @@
+import json
 import os
 from dotenv import load_dotenv
 
@@ -25,3 +26,12 @@ class Config:
         POSTGRES_HOST,
         POSTGRES_DATABASE
     )
+
+    CACHE_TYPE = 'redis'
+    CACHE_REDIS_URL = 'redis://localhost:6379/0'
+    CACHE_DEFAULT_TIMEOUT = 300
+    CACHE_KEY_PREFIX = 'app_cache:'
+    CACHE_OPTIONS = {
+        'serializer': json.dumps,
+        'deserializer': json.loads
+    }

@@ -1,3 +1,4 @@
+from flask_login import login_required
 from flask_restful import Resource
 from flask import jsonify, request
 from app import db
@@ -9,6 +10,7 @@ user_service = UserService()
 
 
 class UsersResource(Resource):
+    @login_required
     def get(self):
 
         ordered = request.args.get('ordered', type=bool)
